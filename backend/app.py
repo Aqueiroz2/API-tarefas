@@ -32,8 +32,19 @@ def listar_tarefas():
     return jsonify(tarefas)
 
 
-@app.route('/tarefas', methods['POST'])
+@app.route('/tarefas', methods=['POST'])
 def criar_tarefa():
     data = request.get_json()
     tarefas.append(data)
     return jsonify(data), 201
+
+
+@app.route('/tarefas/<int:id>', methods=['DELETE'])
+def remover_tarefa(id):
+    global tarefas
+    tarefas = [t for t in tarefas if t['id'] != id]
+    return jsonify({"message": "Tarefa removida"}), 200
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
