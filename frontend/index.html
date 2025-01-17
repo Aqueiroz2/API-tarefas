@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Clientes e Tarefas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Gestão de Clientes e Tarefas</h1>
+
+    <section>
+        <h2>Clientes</h2>
+        <form id="form-clientes">
+            <input type="number" id="cliente-id" placeholder="ID" required>
+            <input type="text" id="cliente-nome" placeholder="Nome" required>
+            <input type="email" id="cliente-email" placeholder="Email" required>
+            <button type="submit">Adicionar Cliente</button>
+        </form>
+        <ul id="lista-clientes"></ul>
+    </section>
+
+    <section>
+        <h2>Tarefas</h2>
+        <form id="form-tarefas">
+            <input type="number" id="tarefa-id" placeholder="ID" required>
+            <input type="text" id="tarefa-titulo" placeholder="Título" required>
+            <input type="text" id="tarefa-descricao" placeholder="Descrição" required>
+            <button type="submit">Adicionar Tarefa</button>
+        </form>
+        <ul id="lista-tarefas"></ul>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
