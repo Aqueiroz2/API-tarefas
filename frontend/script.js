@@ -7,47 +7,52 @@ function exibirMensagem(elemento, mensagem, tipo) {
     setTimeout(() => (elemento.textContent = ""), 3000);
 }
 
-// Exibir mensagem de erro no console
-function exibirMensagemErro(mensagem) {
-    console.error(mensagem);
-}
-
 // Atualizar a tabela de clientes
 async function listarClientes() {
-    const response = await fetch(`${API_URL}/clientes`);
-    const clientes = await response.json();
-
     const tabelaClientes = document.getElementById("tabela-clientes").querySelector("tbody");
-    tabelaClientes.innerHTML = "";
+    tabelaClientes.innerHTML = ""; // Limpar a tabela antes de preencher novamente
 
-    clientes.forEach(cliente => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td>${cliente.id}</td>
-            <td>${cliente.nome}</td>
-            <td>${cliente.email}</td>
-        `;
-        tabelaClientes.appendChild(row);
-    });
+    try {
+        const response = await fetch(`${API_URL}/clientes`);
+        if (!response.ok) throw new Error(`Erro ao listar clientes: ${response.statusText}`);
+
+        const clientes = await response.json();
+        clientes.forEach(cliente => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${cliente.id}</td>
+                <td>${cliente.nome}</td>
+                <td>${cliente.email}</td>
+            `;
+            tabelaClientes.appendChild(row);
+        });
+    } catch (error) {
+        console.error("Erro ao listar clientes:", error);
+    }
 }
 
 // Atualizar a tabela de tarefas
 async function listarTarefas() {
-    const response = await fetch(`${API_URL}/tarefas`);
-    const tarefas = await response.json();
-
     const tabelaTarefas = document.getElementById("tabela-tarefas").querySelector("tbody");
-    tabelaTarefas.innerHTML = "";
+    tabelaTarefas.innerHTML = ""; // Limpar a tabela antes de preencher novamente
 
-    tarefas.forEach(tarefa => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td>${tarefa.id}</td>
-            <td>${tarefa.titulo}</td>
-            <td>${tarefa.descricao}</td>
-        `;
-        tabelaTarefas.appendChild(row);
-    });
+    try {
+        const response = await fetch(`${API_URL}/tarefas`);
+        if (!response.ok) throw new Error(`Erro ao listar tarefas: ${response.statusText}`);
+
+        const tarefas = await response.json();
+        tarefas.forEach(tarefa => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${tarefa.id}</td>
+                <td>${tarefa.titulo}</td>
+                <td>${tarefa.descricao}</td>
+            `;
+            tabelaTarefas.appendChild(row);
+        });
+    } catch (error) {
+        console.error("Erro ao listar tarefas:", error);
+    }
 }
 
 // Adicionar cliente
@@ -65,16 +70,16 @@ document.getElementById("form-clientes").addEventListener("submit", async (e) =>
             body: JSON.stringify({ id: parseInt(id), nome, email }),
         });
 
+        const result = await response.json();
+
         if (response.ok) {
-            exibirMensagem(mensagemClientes, "Cliente cadastrado com sucesso!", "sucesso");
+            exibirMensagem(mensagemClientes, result.message, "sucesso");
             listarClientes();
         } else {
-            const error = await response.json();
-            exibirMensagemErro(`Erro no backend: ${error.error}`);
-            exibirMensagem(mensagemClientes, `Erro: ${error.error}`, "erro");
+            exibirMensagem(mensagemClientes, result.error, "erro");
         }
-    } catch (err) {
-        exibirMensagemErro(`Erro ao conectar ao servidor: ${err}`);
+    } catch (error) {
+        console.error("Erro ao adicionar cliente:", error);
         exibirMensagem(mensagemClientes, "Erro ao conectar ao servidor.", "erro");
     }
 });
@@ -94,16 +99,16 @@ document.getElementById("form-tarefas").addEventListener("submit", async (e) => 
             body: JSON.stringify({ id: parseInt(id), titulo, descricao }),
         });
 
+        const result = await response.json();
+
         if (response.ok) {
-            exibirMensagem(mensagemTarefas, "Tarefa cadastrada com sucesso!", "sucesso");
+            exibirMensagem(mensagemTarefas, result.message, "sucesso");
             listarTarefas();
         } else {
-            const error = await response.json();
-            exibirMensagemErro(`Erro no backend: ${error.error}`);
-            exibirMensagem(mensagemTarefas, `Erro: ${error.error}`, "erro");
+            exibirMensagem(mensagemTarefas, result.error, "erro");
         }
-    } catch (err) {
-        exibirMensagemErro(`Erro ao conectar ao servidor: ${err}`);
+    } catch (error) {
+        console.error("Erro ao adicionar tarefa:", error);
         exibirMensagem(mensagemTarefas, "Erro ao conectar ao servidor.", "erro");
     }
 });
