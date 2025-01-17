@@ -7,6 +7,11 @@ function exibirMensagem(elemento, mensagem, tipo) {
     setTimeout(() => (elemento.textContent = ""), 3000);
 }
 
+// Exibir mensagem de erro no console
+function exibirMensagemErro(mensagem) {
+    console.error(mensagem);
+}
+
 // Atualizar a tabela de clientes
 async function listarClientes() {
     const response = await fetch(`${API_URL}/clientes`);
@@ -65,9 +70,11 @@ document.getElementById("form-clientes").addEventListener("submit", async (e) =>
             listarClientes();
         } else {
             const error = await response.json();
+            exibirMensagemErro(`Erro no backend: ${error.error}`);
             exibirMensagem(mensagemClientes, `Erro: ${error.error}`, "erro");
         }
     } catch (err) {
+        exibirMensagemErro(`Erro ao conectar ao servidor: ${err}`);
         exibirMensagem(mensagemClientes, "Erro ao conectar ao servidor.", "erro");
     }
 });
@@ -92,9 +99,11 @@ document.getElementById("form-tarefas").addEventListener("submit", async (e) => 
             listarTarefas();
         } else {
             const error = await response.json();
+            exibirMensagemErro(`Erro no backend: ${error.error}`);
             exibirMensagem(mensagemTarefas, `Erro: ${error.error}`, "erro");
         }
     } catch (err) {
+        exibirMensagemErro(`Erro ao conectar ao servidor: ${err}`);
         exibirMensagem(mensagemTarefas, "Erro ao conectar ao servidor.", "erro");
     }
 });
